@@ -1,0 +1,16 @@
+# git attributes
+
+* text=auto
+
+# define word files
+*.docx binary
+
+# use Git LFS to store images file and treat them as binary 
+*.jpg filter=lfs diff=lfs merge=lfs -text
+*.png filter=lfs diff=lfs merge=lfs -text
+
+# videos
+*.mp4 binary
+
+# python
+*.ipynb text
