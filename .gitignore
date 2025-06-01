@@ -1,4 +1,4 @@
-# gitignore 
+# gitignore, do not put comments `#` inline
 
 # ignore Jupyter Notebook checkpoints
 .ipynb_checkpoints
@@ -8,5 +8,6 @@
 \~$*.doc*
 *.tmp
 
-# Fritzing
-*.fzz # projects
+# Fritzing 
+## projects 
+*.fzz 
