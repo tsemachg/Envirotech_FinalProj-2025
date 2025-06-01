@@ -1,0 +1,9 @@
+# gitignore 
+
+# ignore Jupyter Notebook checkpoints
+.ipynb_checkpoints
+
+# MS Word temporary files
+# from https://github.com/github/gitignore/blob/main/Global/MicrosoftOffice.gitignore
+\~$*.doc*
+*.tmp
