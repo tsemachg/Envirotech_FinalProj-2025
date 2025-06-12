@@ -36,6 +36,8 @@
 #define myProductID productUID
 Notecard notecard;
 
+// --------------- Setting Variables ---------------
+
 //Battery voltage (Feather M0)
 //#define VBATPIN A7            //Bat pin feather
 float Feather_V = 0;             //float variable for adalogger voltage
@@ -47,23 +49,19 @@ char buffer [24];                           //char var used to hold time and dat
 uint8_t secq, minq, hourq, dayq, monthq;    //uint8_t var used to hold the sec, min, hour, day and month
 uint16_t yearq;
 
-// // Grove sensor stuff 
-// #ifdef  ARDUINO_SAMD_VARIANT_COMPLIANCE
-//     #define SERIAL_OUTPUT Serial
-// #else
-//     #define SERIAL_OUTPUT Serial
-// #endif
-
-// Setting variables
+// Sensors variables
 Adafruit_PM25AQI aqi = Adafruit_PM25AQI();
 
 HM330X sensor; 
-uint8_t data2[30]; // Grove one makes strange measurement output length 30 
-                   // and uses 7 from it..
+uint8_t data2[30]; // Grove sesnor makes output length 30 
 
 
-
+//     ------------------------------ Setup ------------------------------
 void setup() {
+  // LED
+  pinMode(13, OUTPUT);
+  digitalWrite(13, HIGH); // LED on - "begin"
+
   notecard.setDebugOutputStream(Serial);      // enables to watch JSON objects being transferred to and from the Notecard for each request on the serial terminal window
   notecard.begin();                           //start notecard with I2C protocol 
   
@@ -89,24 +87,38 @@ void setup() {
   }
 
 
-  //delay(3000); // wait for sensor to boot up
-  Serial.println("----------Initilizing----------");
-
-  Serial.println("Cheking components:");
+  // Serial.println("----------Initilizing----------"); // - for debugging
+  // Serial.println("Cheking components:"); // - for debugging
   
+  PM25_AQI_Data data;  // Adafruit
+  uint16_t ada_pm10 = 0;  // Adafruit
+  uint16_t ada_pm25 = 0;  // Adafruit
+  uint16_t ada_pm100 = 0;  // Adafruit
+  uint16_t pm10 = 0;  // Grove
+  uint16_t pm25 = 0;  // Grove
+  uint16_t pm100 = 0;  // Grove
+
+  // -1 = missing data / NA
+
   // Initialize Adafruit PMSA003I AQ sensor
   if (! aqi.begin_I2C()) {   // Try and connect by I2C
-    Serial.println("Could not find Adafruit PMSA003I...");
-    // Do something like abort?
+    //Serial.println("Could not find Adafruit PMSA003I..."); // - for debugging
+    ada_pm10 =  -1;
+    ada_pm25 =  -1;
+    ada_pm100 = -1;
+  } else {
+    //Serial.println("Adafruit Sensor found!"); // - for debugging
   }
-  Serial.println("Adafruit Sensor found!");
 
   // Initialize Grove - seedstudio HM3301 PM sensor
   if (sensor.init()) {
-      Serial.println("HM330X init failed!!");
-      //while (1);
+    //Serial.println("HM330X init failed!!"); // - for debugging
+    pm10 = -1;
+    pm25 = -1;
+    pm100 = -1;
+  } else {
+    //Serial.println("Grove sensor found!"); // - for debugging
   }
-  Serial.println("Grove sensor found!");
   
   DateTime b(nc_time());
   DateTime bfixed = b + TimeSpan(0, 2, 0, 0);
@@ -119,7 +131,7 @@ void setup() {
   sprintf (buffer, "%02u:%02u:%02u %02u/%02u/%04u", hourq, minq, secq, dayq, monthq, yearq);
   Serial.print(buffer);
 
-  //Establish a template to optimize queue size and data usage
+  // Establish a template to optimize queue size and data usage
   {
   J * req = notecard.newRequest("note.template");
   JAddStringToObject(req, "file", "readings.qo");
@@ -136,72 +148,72 @@ void setup() {
   JAddNumberToObject(body, "Grove10", 12.1);
 
   notecard.sendRequest(req);
-  Serial.print("built template!,   ");
+  Serial.println("built template!");
   }
 
 
   // ------------------------------ "loop" inside setup ---------------------------------
-  PM25_AQI_Data data;  // adafruit
-  uint16_t pm10 = 0;  // Grove
-  uint16_t pm25 = 0;  // Grove
-  uint16_t pm100 = 0;  // Grove
-
+  
   // Read data
+  // -1 = missing data / NA
   //// Adafruit sensor
   if (! aqi.read(&data)) { 
-    Serial.println("Could not read from AQI");
-    
-    delay(500);  // try again in a bit!
-    return;
+    //Serial.println("Could not read from AQI"); // - for debugging
+    ada_pm10 =  -1;
+    ada_pm25 =  -1;
+    ada_pm100 = -1;
+  } else {
+    //Serial.println("AQI reading success"); // - for debugging
+    ada_pm10 = data.pm10_env;
+    ada_pm25 = data.pm25_env;
+    ada_pm100 = data.pm100_env;
   }
-  Serial.println("AQI reading success");
 
   //// Grove sensor
   if (sensor.read_sensor_value(data2, 29)) {
-    Serial.println("HM330X read result failed!!");
-    
-    delay(500);  // try again in a bit!
-    //return;
-  } 
-  Serial.println("HM330X reading success");
+    //Serial.println("HM330X read result failed!!"); // - for debugging
+    pm10 = -1;
+    pm25 = -1;
+    pm100 = -1;
+  } else {
+    //Serial.println("HM330X reading success"); // - for debugging
+    /* 1 -> "sensor num:"
+    2,3,4 -> standard PM mass concentrations, industrial 
+    5,6,7 -> concentration of PM in atmospheric environment
+    So we use 5,6,7 of data2 */
+    pm10 = (uint16_t) data2[5 * 2] << 8 | data2[5 * 2 + 1];  // 5
+    pm25 = (uint16_t) data2[6 * 2] << 8 | data2[6 * 2 + 1];  // 6
+    pm100 = (uint16_t) data2[7 * 2] << 8 | data2[7 * 2 + 1]; // 7
+  }
 
-  // Serial.Print -> later save to SD / transmit blues.io
-  //// Adafruit PMSA003I
-  Serial.println(F("---------------------------------------"));
-  Serial.println(F("Adafruit -- Concentration Units (environmental)"));
-  Serial.print(F("PM 1.0: ")); Serial.print(data.pm10_env);
-  Serial.print(F("\t\tPM 2.5: ")); Serial.print(data.pm25_env);
-  Serial.print(F("\t\tPM 10: ")); Serial.println(data.pm100_env);
-  Serial.println("");
-
-  //// Grove HM3301
-  // parse_result_value(data2); not necessary for now
-
-  // not exactly sure why, but this is how their code works...
-  /*
-  1 -> sensor number (?) "sensor num:"
-  2,3,4 -> standard PM mass concentrations, industrial 
-  5,6,7 -> concentration of PM in atmospheric environment
-  So we use 5,6,7 of data2
-  */
-  pm10 = (uint16_t) data2[5 * 2] << 8 | data2[5 * 2 + 1];  // 5
-  pm25 = (uint16_t) data2[6 * 2] << 8 | data2[6 * 2 + 1];  // 6
-  pm100 = (uint16_t) data2[7 * 2] << 8 | data2[7 * 2 + 1]; // 7
-  
-
-  Serial.println(F("Grove -- Units (environmental) ug/m3"));
-  Serial.print(F("PM 1.0: ")); Serial.print(pm10);
-  Serial.print(F("\t\tPM 2.5: ")); Serial.print(pm25);
-  Serial.print(F("\t\tPM 10: ")); Serial.println(pm100);
-  
-  Serial.println(F("---------------------------------------"));
-  
   J *rsp = notecard.requestAndResponse(notecard.newRequest("card.voltage"));                     //NoteCard voltage measurement 
   if (rsp != NULL) {
       NoteCard_V = JGetNumber(rsp, "value");
       notecard.deleteResponse(rsp);
   }
   Notecard_temp = Get_NoteCard_Temp();
+
+  // Serial.Print -> later save to SD / transmit blues.io
+  Serial.println(F("------------------- Print Begin -------------------"));  
+  Serial.print("Time"); Serial.println(time)
+  Serial.print("NoteCard_Temp"); Serial.println(Notecard_temp)
+  Serial.print("Feather_V"); Serial.println(Feather_V)
+  Serial.print("NoteCard_V"); Serial.println(Notecard_V)
+  Serial.println(F("---------------------------------------------------"));  
+
+  //// Adafruit PMSA003I
+  Serial.println(F("Adafruit -- Concentration Units (environmental)"));
+  Serial.print(F("PM 1.0: ")); Serial.print(ada_pm10);
+  Serial.print(F("\t\tPM 2.5: ")); Serial.print(ada_pm25);
+  Serial.print(F("\t\tPM 10: ")); Serial.println(ada_pm100);
+  Serial.println("");
+
+  //// Grove HM3301
+  Serial.println(F("Grove -- Units (environmental) ug/m3"));
+  Serial.print(F("PM 1.0: ")); Serial.print(pm10);
+  Serial.print(F("\t\tPM 2.5: ")); Serial.print(pm25);
+  Serial.print(F("\t\tPM 10: ")); Serial.println(pm100);
+  Serial.println(F("-------------------- Print End --------------------"));
 
 
   const char* time = buffer;
@@ -215,12 +227,12 @@ void setup() {
       JAddNumberToObject(body, "Notecard_temp", Notecard_temp);
       JAddNumberToObject(body, "Feather_V", Feather_V);
       JAddNumberToObject(body, "NoteCard_V", NoteCard_V);
-      JAddNumberToObject(body, "Adafruit1", data.pm10_env);
-      JAddNumberToObject(body, "Adafruit2.5", data.pm25_env);
-      JAddNumberToObject(body, "Adafruit10", data.pm100_env);
-      JAddNumberToObject(body, "Grove1", pm10);
-      JAddNumberToObject(body, "Grove2.5", pm25);
-      JAddNumberToObject(body, "Grove10", pm100);
+      JAddNumberToObject(body, "Adafruit10", ada_pm10);
+      JAddNumberToObject(body, "Adafruit25", ada_pm25);
+      JAddNumberToObject(body, "Adafruit100", ada_pm100);
+      JAddNumberToObject(body, "Grove10", pm10);
+      JAddNumberToObject(body, "Grove25", pm25);
+      JAddNumberToObject(body, "Grove100", pm100);
     }
     notecard.sendRequest(req);
     
@@ -228,13 +240,14 @@ void setup() {
   
 
 
-  
+  digitalWrite(13, LOW); // LED off - "finished"
 
 }
 
+// ------------------------------ Loop - cycle of waking up ------------------------------
 void loop()  {
   int IntervalSeconds = getInterval();
-  int TimeOfSensorsWarmingUp = 15;       //              //[sec] this means it will wake up for ~20 sec every cycle and then wait another ~10 seconds until meeting the interval condition (i.e., letting about 10 seconds for the CO2 and O2(only from dfrobot, the figaro is most likely not affected by warming time) warming up time ); needs to be optimized for the time of the acual readigs (i.e., how much time the adalogger spend in the setup loop)
+  int TimeOfSensorsWarmingUp = 15;       //              //[sec] warmup time for sensors
   int IntervalSecondsCorrected = IntervalSeconds-TimeOfSensorsWarmingUp;
   Serial.print("entering sleep mode for "); Serial.print(IntervalSecondsCorrected); Serial.println(" seconds");
   //delay(100);
@@ -243,7 +256,6 @@ void loop()  {
   JAddNumberToObject(req, "seconds", IntervalSecondsCorrected);
   notecard.sendRequest(req);
   // Wait 1s before retrying
-  //Watchdog.disable(); // end the 25 seconds timer
   ::delay(1000);
 }
 
