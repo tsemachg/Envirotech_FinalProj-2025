@@ -89,7 +89,7 @@ void setup() {
   }
 
 
-  delay(3000); // wait for sensor to boot up
+  //delay(3000); // wait for sensor to boot up
   Serial.println("----------Initilizing----------");
 
   Serial.println("Cheking components:");
@@ -104,7 +104,7 @@ void setup() {
   // Initialize Grove - seedstudio HM3301 PM sensor
   if (sensor.init()) {
       Serial.println("HM330X init failed!!");
-      while (1);
+      //while (1);
   }
   Serial.println("Grove sensor found!");
   
@@ -161,7 +161,7 @@ void setup() {
     Serial.println("HM330X read result failed!!");
     
     delay(500);  // try again in a bit!
-    return;
+    //return;
   } 
   Serial.println("HM330X reading success");
 
@@ -196,7 +196,13 @@ void setup() {
   
   Serial.println(F("---------------------------------------"));
   
+  J *rsp = notecard.requestAndResponse(notecard.newRequest("card.voltage"));                     //NoteCard voltage measurement 
+  if (rsp != NULL) {
+      NoteCard_V = JGetNumber(rsp, "value");
+      notecard.deleteResponse(rsp);
+  }
   Notecard_temp = Get_NoteCard_Temp();
+
 
   const char* time = buffer;
   J *req = notecard.newRequest("note.add");
@@ -222,7 +228,7 @@ void setup() {
   
 
 
-  delay(60000); // measure each 10 seconds
+  
 
 }
 
@@ -273,7 +279,7 @@ float Get_NoteCard_Temp() {
 
 // This function returns the reading_interval from the environment variables in noteHub
 int getInterval() {
-  int IntervalSeconds = 120;                                    //a default value -(in seconds)- If the variable is not set, set to 0, or set to an invalid type 
+  int IntervalSeconds = 600;                                    //a default value -(in seconds)- If the variable is not set, set to 0, or set to an invalid type 
   J *req = notecard.newRequest("env.get");
   if (req != NULL) {
       JAddStringToObject(req, "name", "reading_interval");
