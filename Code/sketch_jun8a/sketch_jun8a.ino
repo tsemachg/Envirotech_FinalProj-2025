@@ -193,12 +193,14 @@ void setup() {
   }
   Notecard_temp = Get_NoteCard_Temp();
 
+  const char* time = buffer;
+
   // Serial.Print -> later save to SD / transmit blues.io
   Serial.println(F("------------------- Print Begin -------------------"));  
-  Serial.print("Time"); Serial.println(time)
-  Serial.print("NoteCard_Temp"); Serial.println(Notecard_temp)
-  Serial.print("Feather_V"); Serial.println(Feather_V)
-  Serial.print("NoteCard_V"); Serial.println(Notecard_V)
+  Serial.print("Time"); Serial.println(time);
+  Serial.print("NoteCard_Temp"); Serial.println(Notecard_temp);
+  Serial.print("Feather_V"); Serial.println(Feather_V);
+  Serial.print("NoteCard_V"); Serial.println(NoteCard_V);
   Serial.println(F("---------------------------------------------------"));  
 
   //// Adafruit PMSA003I
@@ -216,7 +218,6 @@ void setup() {
   Serial.println(F("-------------------- Print End --------------------"));
 
 
-  const char* time = buffer;
   J *req = notecard.newRequest("note.add");
   if (req != NULL)  {
     JAddStringToObject(req, "file", "readings.qo");
