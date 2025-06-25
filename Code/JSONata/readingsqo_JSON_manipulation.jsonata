@@ -1,0 +1,19 @@
+(    
+        /* Function to correct time offset by 1 hour - NOT ideal solution */
+        $add3Hours := function($v1) {(
+            $fromMillis($toMillis($v1, '[H01]:[m01]:[s01] [D01]/[M01]/[Y0001]') + 3600000*1
+            , '[H01]:[m01]:[s01] [D01]/[M01]/[Y0001]'); 
+        )};
+    {
+        "file": file, 
+        "Time": $add3Hours(body.Time),
+        "Notecard_temp": body.Notecard_temp,
+        "NoteCard_V": body.NoteCard_V,
+        "Adafruit10": body.Adafruit10,
+        "Adafruit25": body.Adafruit25,
+        "Adafruit100": body.Adafruit100,
+        "Grove10": body.Grove10,
+        "Grove25": body.Grove25,
+        "Grove100": body.Grove100
+    }
+)
