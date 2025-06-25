@@ -40,7 +40,7 @@ Notecard notecard;
 
 //Battery voltage (Feather M0)
 //#define VBATPIN A7            //Bat pin feather
-float Feather_V = 0;             //float variable for adalogger voltage
+// float Feather_V = 0;             //float variable for adalogger voltage
 float NoteCard_V = 0;       //float variable for Notecarrier voltage
 float Notecard_temp = 0;
 
@@ -75,6 +75,7 @@ void setup() {
     JAddStringToObject(req, "mode", "periodic");                                        //The Notecard will periodically power-on the modem and connect to Notehub whenever it needs to synchronize with the service, and will then power-off the modem when not in use
     JAddStringToObject(req, "vinbound", "usb:2;high:60;normal:120;low:240;dead:0");     //The max wait time (in minutes) to sync inbound data from Notehub - with a voltage-variable value 
     JAddStringToObject(req, "voutbound", "usb:2;high:30;normal:60;low:120;dead:0");     //The max wait time (minutes) to sync outbound data (such as new Notes added by the host application) from the Notecard - with a voltage-variable value
+    // JAddStringToObject(req, "voutbound", "usb:2;high:2;normal:2;low:2;dead:0");     // debugging test modified
     //JAddStringToObject(req, "card.motion.mode", "stop");  
     //JAddBoolToObject(req, "sync", true);                                                //If you want to initiate a sync immediately after adding a Note, set the sync field to true.                                           
     notecard.sendRequestWithRetry(req, 5);                                               // Issue the request
@@ -138,14 +139,14 @@ void setup() {
   J * body = JAddObjectToObject(req, "body");
   JAddStringToObject(body, "Time", "15:12:24 17/08/2023");
   JAddNumberToObject(body, "Notecard_temp", 12.1);
-  JAddNumberToObject(body, "Feather_V", 12.1);
+  // JAddNumberToObject(body, "Feather_V", 12.1);
   JAddNumberToObject(body, "NoteCard_V", 12.1);
-  JAddNumberToObject(body, "Adafruit1", 12.1);
-  JAddNumberToObject(body, "Adafruit2.5", 12.1);
   JAddNumberToObject(body, "Adafruit10", 12.1);
-  JAddNumberToObject(body, "Grove1", 12.1);
-  JAddNumberToObject(body, "Grove2.5", 12.1);
+  JAddNumberToObject(body, "Adafruit25", 12.1);
+  JAddNumberToObject(body, "Adafruit100", 12.1);
   JAddNumberToObject(body, "Grove10", 12.1);
+  JAddNumberToObject(body, "Grove25", 12.1);
+  JAddNumberToObject(body, "Grove100", 12.1);
 
   notecard.sendRequest(req);
   Serial.println("built template!");
@@ -199,7 +200,7 @@ void setup() {
   Serial.println(F("------------------- Print Begin -------------------"));  
   Serial.print("Time"); Serial.println(time);
   Serial.print("NoteCard_Temp"); Serial.println(Notecard_temp);
-  Serial.print("Feather_V"); Serial.println(Feather_V);
+  // Serial.print("Feather_V"); Serial.println(Feather_V);
   Serial.print("NoteCard_V"); Serial.println(NoteCard_V);
   Serial.println(F("---------------------------------------------------"));  
 
@@ -226,7 +227,7 @@ void setup() {
     if (body)  {
       JAddStringToObject(body, "Time", time);
       JAddNumberToObject(body, "Notecard_temp", Notecard_temp);
-      JAddNumberToObject(body, "Feather_V", Feather_V);
+      // JAddNumberToObject(body, "Feather_V", Feather_V);
       JAddNumberToObject(body, "NoteCard_V", NoteCard_V);
       JAddNumberToObject(body, "Adafruit10", ada_pm10);
       JAddNumberToObject(body, "Adafruit25", ada_pm25);
