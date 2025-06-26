@@ -1,0 +1,17 @@
+(    
+        /* Function to Change time to Matlab readable */
+        /* Function to correct time offset by 1 hour - NOT ideal solution */
+        $add3Hours := function($v1) {(
+            $fromMillis($toMillis($v1, '[H01]:[m01]:[s01] [D01]/[M01]/[Y0001]') + 3600000*1,
+            '[Y0001]-[M01]-[D01] [H01]:[m01]:[s01]'); 
+        )}; 
+    { 
+        "api_key": "xxxAPIKEYHERExxx",
+        "field1": $add3Hours(body.Time), /* Time */
+        "field2": body.Notecard_temp, /* Notecard_temp */
+        "field3": body.NoteCard_V, /* NoteCard_V */
+        "field4": {"Adafruit10": body.Adafruit10, "Grove10": body.Grove10},
+        "field5": {"Adafruit25": body.Adafruit25, "Grove25": body.Grove25},
+        "field6": {"Adafruit100": body.Adafruit100, "Grove100": body.Grove100}
+    }
+)
