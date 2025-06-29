@@ -8,12 +8,6 @@
     { 
         "api_key": "xxxAPIKEYHERExxx",
         "field1": $manageTime(body.Time), 
-        "field2": $round(body.Notecard_temp,2),
-        "field3": body.Adafruit10,
-        "field4": body.Adafruit25,
-        "field5": body.Adafruit100,
-        "field6": body.Grove10,
-        "field7": body.Grove25,
-        "field8": body.Grove100
+        "field2": $round(body.NoteCard_V,3)
     }
 )

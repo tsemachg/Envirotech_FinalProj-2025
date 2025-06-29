@@ -34,6 +34,7 @@ Link to sensor output [Online PM Dashboard](https://thingspeak.mathworks.com/cha
 ## Contents: 
 * `Code` - Folder containing code used for Arduino, Notehub (blues.io) and ThingSpeak.
 * `Frizting parts` - Files used to create the connection diagram.
+* `Output` - Example for output files downloaded by the provided method.
 * `Photos` - Photos of parts and the system from various stages.
 * `System sketch` - Connection diagram made in Fritzing software.
 
