@@ -13,7 +13,7 @@ Link to sensor output [Online PM Dashboard](https://thingspeak.mathworks.com/cha
 
 |created_at|entry_id|field1|field2|field3|field4|field5|field6|field7|field8
 |:--------:|:------:|:----:|:----:|:----:|:----:|:----:|:----:|:----:|:----:
-|Do not use!|   -   |Time  |Sensor Temp(°C)|PM10(Ada)|PM25(Ada)|PM100(Ada)|PM10(Grove)|PM25(Grove)|PM100(Grove)
+|Do not use!|   -   |Time  |Sensor Temp(°C)|PM1(Ada)|PM2.5(Ada)|PM10(Ada)|PM1(Grove)|PM2.5(Grove)|PM10(Grove)
 
 #### Download data in CSV format: 
 
