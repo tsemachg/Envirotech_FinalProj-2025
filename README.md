@@ -16,6 +16,7 @@ Link to sensor output [Online PM Dashboard](https://thingspeak.mathworks.com/cha
 |1     |Do not use!|   -   |Time  |Sensor Temp(°C)|PM1(Ada)|PM2.5(Ada)|PM10(Ada)|PM1(Grove)|PM2.5(Grove)|PM10(Grove)
 |2     |Do not use!|   -   |Time  |Sensor Voltage
 
+[Output example for Table 1](Output/feeds_Table1Example_2025-06-29.csv)
 
 **Table 1** - Time, Temp(°C) and PM data:
 
