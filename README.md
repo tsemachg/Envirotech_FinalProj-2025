@@ -31,7 +31,7 @@ To view live sensor output - [Online PM Dashboard](https://thingspeak.mathworks.
 |2     |Do not use!|   -   |Time  |Sensor Voltage
 
 
-## Contents: 
+## Repository Contents: 
 * `Code` - Folder containing code used for Arduino, Notehub (blues.io) and ThingSpeak.
 * `Frizting parts` - Files used to create the connection diagram.
 * `Output` - Example for output files downloaded by the provided method.
