@@ -19,7 +19,7 @@ To view live sensor output - [Online PM Dashboard](https://thingspeak.mathworks.
 
 * For past 48 hours - [Click here](https://api.thingspeak.com/channels/2998453/feeds.csv?api_key=HX47E67RSDC3UU6Y&days=2)
 * For past week - [Click here](https://api.thingspeak.com/channels/2998453/feeds.csv?api_key=HX47E67RSDC3UU6Y&days=7)
-* For all entries (max of 8000 entries allowed) - [Click here](https://api.thingspeak.com/channels/2998453/feeds.csv?api_key=HX47E67RSDC3UU6Y)
+* For all entries (max of 8000 entries allowed) - [Click here](https://api.thingspeak.com/channels/2998453/feeds.csv?api_key=HX47E67RSDC3UU6Y&results=8000)
 
 **Example** - [Output example for Table 1](Output/feeds_Table1Example_2025-06-29.csv) from 2025-06-29.
 
