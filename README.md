@@ -7,6 +7,10 @@ Directory created for the course: "Envirotech" - BIDR BGU, 2025 spring semester.
 To view live sensor output - [Online PM Dashboard](https://thingspeak.mathworks.com/channels/2997781) hosted at ThingSpeak.<br>
 <br>
 
+<img src="Photos/ThingSpeak_demo.png" width=40% height=40%>
+
+<br>
+
 ### Download data in CSV format:
 
 **Table 1** - Time, Temp(°C) and PM data:
