@@ -40,10 +40,10 @@ To view live sensor output - [Online PM Dashboard](https://thingspeak.mathworks.
 * `Bill of Materials` - Table detailing the cost of used components.
 
 ### System Photo: 
-![Alt text](Photos/System_Photo_2.jpeg)
+![Alt text](Photos/System_Photo_2.jpg)
 
 ### Connection Diagram: 
-![Alt text](System sketch/Fritzing_PM_sensor_proj.jpg)
+![Alt text](System&#32;sketch/Fritzing_PM_sensor_proj.jpg)
 
 <br>
 
