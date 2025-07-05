@@ -37,6 +37,7 @@ To view live sensor output - [Online PM Dashboard](https://thingspeak.mathworks.
 * `Output` - Example for output files downloaded by the provided method.
 * `Photos` - Photos of parts and the system from various stages.
 * `System sketch` - Connection diagram made in Fritzing software.
+* `Bill of Materials` - Table detailing the cost of used components.
 
 ### System Photo: 
 
