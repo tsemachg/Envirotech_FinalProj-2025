@@ -13,13 +13,13 @@ To view live sensor output - [Online PM Dashboard](https://thingspeak.mathworks.
 
 **Table 1** - Time, Temp(°C) and PM data:
 
-* [![Button Download]](https://api.thingspeak.com/channels/2997781/feeds.csv?days=2) - For past 48 hours 
+* [![Button Download]](https://api.thingspeak.com/channels/2997781/feeds.csv?days=3) - For past 72 hours 
 * [![Button Download]](https://api.thingspeak.com/channels/2997781/feeds.csv?days=7) - For past week 
 * [![Button Download]](https://api.thingspeak.com/channels/2997781/feeds.csv?results=8000) - For all entries (max of 8000 entries allowed ≈ 2 months)  <br> (if the project continues to run, additional options for accessing past months will be included)
 
 **Table 2** - Time and Sensor Voltage:
 
-* [![Button Download]](https://api.thingspeak.com/channels/2998453/feeds.csv?api_key=HX47E67RSDC3UU6Y&days=2) - For past 48 hours 
+* [![Button Download]](https://api.thingspeak.com/channels/2998453/feeds.csv?api_key=HX47E67RSDC3UU6Y&days=3) - For past 72 hours 
 * [![Button Download]](https://api.thingspeak.com/channels/2998453/feeds.csv?api_key=HX47E67RSDC3UU6Y&days=7) - For past week 
 * [![Button Download]](https://api.thingspeak.com/channels/2998453/feeds.csv?api_key=HX47E67RSDC3UU6Y&results=8000) - For all entries (max of 8000 entries allowed ≈ 2 months) 
 
