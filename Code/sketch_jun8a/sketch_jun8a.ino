@@ -1,6 +1,6 @@
 //  +---------------------------------------------------+
 //  |                                                   |
-//  |  2025-05-28                                       |
+//  |  2025-06-25                                       |
 //  |                                                   |
 //  |  Envirotech, BGU 2025 - Final Project             |
 //  |  PM Sensor                                        |
@@ -17,6 +17,9 @@
 //  |    Website    : www.seeed.cc                      |
 //  |    Author     : downey                            |
 //  |    Create Time: August 2018                       |
+//  |                                                   |
+//  |  * Notehub usage example code given by Elyasaf-   |
+//  |    from Levintal-Lab.                             |
 //  |                                                   |
 //  +---------------------------------------------------+
 
@@ -42,17 +45,17 @@ Notecard notecard;
 //#define VBATPIN A7            //Bat pin feather
 // float Feather_V = 0;             //float variable for adalogger voltage
 float NoteCard_V = 0;       //float variable for Notecarrier voltage
-float Notecard_temp = 0;
+float Notecard_temp = 0;    //float variable for Notecarrier temperature
 
-//RTC_DS3231 rtc;                           //RTC define
+//RTC_DS3231 rtc;                           //Real-Time-Clock define
 char buffer [24];                           //char var used to hold time and date
 uint8_t secq, minq, hourq, dayq, monthq;    //uint8_t var used to hold the sec, min, hour, day and month
 uint16_t yearq;
 
 // Sensors variables
-Adafruit_PM25AQI aqi = Adafruit_PM25AQI();
+Adafruit_PM25AQI aqi = Adafruit_PM25AQI();                //Adafruit PM sensor
 
-HM330X sensor; 
+HM330X sensor;                                            //Grove PM sensor  
 uint8_t data2[30]; // Grove sesnor makes output length 30 
 
 
@@ -60,7 +63,7 @@ uint8_t data2[30]; // Grove sesnor makes output length 30
 void setup() {
   // LED
   pinMode(13, OUTPUT);
-  digitalWrite(13, HIGH); // LED on - "begin"
+  digitalWrite(13, HIGH);                      // LED on - "begin", to help with debugging
 
   notecard.setDebugOutputStream(Serial);      // enables to watch JSON objects being transferred to and from the Notecard for each request on the serial terminal window
   notecard.begin();                           //start notecard with I2C protocol 
@@ -120,7 +123,8 @@ void setup() {
   } else {
     //Serial.println("Grove sensor found!"); // - for debugging
   }
-  
+
+  // Date-time configuration with helper function nc_time
   DateTime b(nc_time());
   DateTime bfixed = b + TimeSpan(0, 2, 0, 0);
   secq = bfixed.second();
@@ -132,7 +136,7 @@ void setup() {
   sprintf (buffer, "%02u:%02u:%02u %02u/%02u/%04u", hourq, minq, secq, dayq, monthq, yearq);
   Serial.print(buffer);
 
-  // Establish a template to optimize queue size and data usage
+  // Establish a template of expected values to optimize queue size and data usage
   {
   J * req = notecard.newRequest("note.template");
   JAddStringToObject(req, "file", "readings.qo");
@@ -194,7 +198,7 @@ void setup() {
   }
   Notecard_temp = Get_NoteCard_Temp();
 
-  const char* time = buffer;
+  const char* time = buffer;                                                                     //Date time as character
 
   // Serial.Print -> later save to SD / transmit blues.io
   Serial.println(F("------------------- Print Begin -------------------"));  
@@ -219,7 +223,7 @@ void setup() {
   Serial.println(F("-------------------- Print End --------------------"));
 
 
-  J *req = notecard.newRequest("note.add");
+  J *req = notecard.newRequest("note.add");                 //Compose the Note with all data and send it to Notehub
   if (req != NULL)  {
     JAddStringToObject(req, "file", "readings.qo");
     //JAddBoolToObject(req, "sync", true);                  //when uncomment will sync to notehub every reading
@@ -242,7 +246,7 @@ void setup() {
   
 
 
-  digitalWrite(13, LOW); // LED off - "finished"
+  digitalWrite(13, LOW); // LED off - "finished", for debugging
 
 }
 
@@ -262,7 +266,7 @@ void loop()  {
 }
 
 
-unsigned long nc_time() {
+unsigned long nc_time() {                   //function to get correct time, will go further processing
 	//unsigned long linux_epoch;
   uint32_t t;
 	J *req, *rsp;
@@ -274,7 +278,7 @@ unsigned long nc_time() {
 	return 0;
 } 
 
-float Get_NoteCard_Temp() {
+float Get_NoteCard_Temp() {                //function to get the currnet Notecard temperature
     float result = 0.0f;
     // Query Notecard for temperature
     J * req = notecard.newRequest("card.temp");
