@@ -6,8 +6,9 @@ Directory created for the course: "Envirotech" - BIDR BGU, 2025 spring semester.
 ## Data Availability
 To view live sensor output - [Online PM Dashboard](https://thingspeak.mathworks.com/channels/2997781) hosted at ThingSpeak.<br>
 
-<img src="Photos/ThingSpeak_demo.png" width=40% height=auto>
-
+<a href="https://thingspeak.mathworks.com/channels/2997781">
+  <img src="Photos/ThingSpeak_demo.png" width=40% height=auto>
+</a>
 
 ### Download data in CSV format:
 
