@@ -1,10 +1,11 @@
 (    
         /* Function to Change time to Matlab readable */
         /* Function to correct time offset by 1 hour - NOT ideal solution */
+        /* As of 2025-10-26 no time offset due to daylights savings/winter clock */
         $manageTime := function($v1) {(
-            $fromMillis($toMillis($v1, '[H01]:[m01]:[s01] [D01]/[M01]/[Y0001]') + 3600000*1,
+            $fromMillis($toMillis($v1, '[H01]:[m01]:[s01] [D01]/[M01]/[Y0001]') + 3600000*0,
             '[Y0001]-[M01]-[D01] [H01]:[m01]:[s01]'); 
-        )}; 
+        )};  
     { 
         "api_key": "xxxAPIKEYHERExxx",
         "field1": $manageTime(body.Time), 
